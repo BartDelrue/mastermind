@@ -53,11 +53,11 @@ function check() {
   nextTick(() => scrollTo(0, document.body.scrollHeight))
 }
 
-function end(i, e) {
+function drop(i, e) {
   const t = type.value
   const target = e.currentTarget.tagName
   e.currentTarget.classList.remove('over')
-  type.value = null
+  end()
   if (t === 'opo') {
     pegs.value[draggingIndex.value] = pegs.value.splice(i, 1, pegs.value[draggingIndex.value])[0]
   }
@@ -72,6 +72,9 @@ function start(p, t, e) {
   type.value = t
   e.stopPropagation()
   draggingIndex.value = p
+}
+function end() {
+  type.value = null
 }
 
 function leave(e) {
@@ -127,7 +130,8 @@ function over(e) {
         <div
             v-for="(p, i) in pegs"
             :key="p.opo"
-            @drop.prevent="end(i, $event)"
+            @drop.prevent="drop(i, $event)"
+            @dragend="end"
             @dragover="over"
             @dragleave.prevent="leave"
             @dragstart="start(i, 'opo', $event)"
@@ -135,8 +139,8 @@ function over(e) {
             draggable="true"
             :class="{target: type === 'opo'}"
         >
-          <figure @drop.prevent="end(i, $event)" @dragleave.prevent="leave" @dragover="over" :class="{target: type === 'img'}">
-            <img :src="p.img" @dragstart="start(i, 'img', $event)" draggable="true" alt="" />
+          <figure @drop.prevent="drop(i, $event)" @dragleave.prevent="leave" @dragover="over" :class="{target: type === 'img'}">
+            <img :src="p.img" @dragstart="start(i, 'img', $event)" draggable="true" alt="" @dragend="end" />
           </figure>
 
           <p>{{ p.opo }}</p>
@@ -144,7 +148,7 @@ function over(e) {
       </div>
       <div class="center">
         <button :disabled="gameOver" @click="check">check</button>
-        <p>Aantal pogingen: {{ history.length }}</p>
+        <strong>Aantal pogingen: {{ history.length }}</strong>
       </div>
     </section>
   </div>
@@ -252,9 +256,10 @@ button {
   font-weight:700;
   padding:.5em 1em;
   margin-block:2em;
+  margin-inline-end: 2em;
   display:inline-block;
   box-shadow:0 0 .5em rgba(0,0,0,0.8);
-  transition:box-shadow .2s ease-in-out
+  transition:box-shadow .2s ease-in-out;
 }
 
 button:enabled:hover,button:enabled:focus-visible {
