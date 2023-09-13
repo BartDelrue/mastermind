@@ -3,24 +3,24 @@ import { nextTick, ref } from 'vue'
 
 const goal = ref([
   {
-    opo: 'web',
+    opo: 'Web developer',
     img: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.specialistspeakers.com%2Fwp-content%2Fuploads%2F2015%2F09%2FTim-Berners-Lee.jpg&f=1&nofb=1&ipt=0b187a2e147d9ed146a7664a1279b517cb6454bcf6cd73709d4283dac8bd8003&ipo=images'
   },
   {
-    opo: 'infra',
-    img: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse2.mm.bing.net%2Fth%3Fid%3DOIP.M3hTFmUuetXthJXjswBhIwHaKw%26pid%3DApi&f=1&ipt=1ced49fefe754b5a7afee4dd5608814d764051375faa2e3bba57f56b68d7834e&ipo=images'
+    opo: 'Network & security',
+    img: new URL('@/assets/img/serge.png', import.meta.url).href
   },
   {
-    opo: 'software',
-    img: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.constellationr.com%2Fsites%2Fdefault%2Ffiles%2Fstyles%2Fuser_profile__medium_square%2Fpublic%2Fperson%2FTBLOfficial_FullRes%2520(2).jpg%3Fitok%3DH4CrREce&f=1&nofb=1&ipt=afddd26492fc9ed87b9cc2304d5404117e7a87c2d2583a581d70723fbbe7adaf&ipo=images'
+    opo: 'Software & AI',
+    img: new URL('@/assets/img/kristien.png', import.meta.url).href
   },
   {
-    opo: 'telecom',
-    img: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.exec-comms.com%2FPictures%2FBlog2%2Fberners-lee.jpg&f=1&nofb=1&ipt=cbece0e81575910a39b32034f171013101e79131f1f843d45d38b317077a3bce&ipo=images'
+    opo: 'Telecom',
+    img: new URL('@/assets/img/dirk.png', import.meta.url).href
   },
   {
-    opo: 'iot',
-    img: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse4.mm.bing.net%2Fth%3Fid%3DOIP.13Hg_INME3TXChBxSUM4RQAAAA%26pid%3DApi&f=1&ipt=5d9425b8396ab9274bf0d537dba7e9ef7da913cc19e635ff564956f1bdeef551&ipo=images'
+    opo: 'IoT',
+    img: new URL('@/assets/img/mario.png', import.meta.url).href
   }
 ])
 const imgs = goal.value
@@ -57,6 +57,7 @@ function end(i, e) {
   const t = type.value
   const target = e.currentTarget.tagName
   e.currentTarget.classList.remove('over')
+  type.value = null
   if (t === 'opo' && target === 'DIV') {
     pegs.value[draggingIndex.value] = pegs.value.splice(i, 1, pegs.value[draggingIndex.value])[0]
   }
@@ -122,7 +123,7 @@ function over(e) {
           </div>
         </div>
       </div>
-      <div class="slots" :class="{ 'game-over': gameOver }">
+      <div class="slots" :class="{ 'game-over': gameOver }" >
         <div
             v-for="(p, i) in pegs"
             :key="p.opo"
@@ -132,8 +133,9 @@ function over(e) {
             @dragstart="start(i, 'opo', $event)"
             class="card"
             draggable="true"
+            :class="{target: type === 'opo'}"
         >
-          <figure @drop.prevent="end(i, $event)" @dragleave.prevent="leave" @dragover="over">
+          <figure @drop.prevent="end(i, $event)" @dragleave.prevent="leave" @dragover="over" :class="{target: type === 'img'}">
             <img :src="p.img" @dragstart="start(i, 'img', $event)" draggable="true" alt="" />
           </figure>
 
@@ -150,109 +152,122 @@ function over(e) {
 
 <style>
 body {
-  user-select: none;
+  user-select:none
 }
 
 .sidebar-layout {
-  display: flex;
-  gap: 4em;
-  flex-wrap: wrap;
-  align-items: flex-start;
+  display:flex;
+  gap:4em;
+  flex-wrap:wrap;
+  align-items:flex-start
 }
 
 .sidebar-layout > section:first-child {
-  flex: 0 1 24rem;
-  position: sticky;
-  top: 0;
+  flex:0 1 24rem
 }
 
 li {
-  margin-block: .5em;
+  margin-block:.5em
 }
 
 .history .slots {
-  filter: grayscale(1);
+  //filter:grayscale(1)
 }
+
 .over {
-  opacity: 0.5;
+  opacity:.5
 }
 
 .slots {
-  display: flex;
-  justify-content: center;
-  gap: 1em;
-  transition: background-color 0.2s ease-in-out;
-  padding: 2em;
+  display:flex;
+  justify-content:center;
+  gap:1em;
+  transition:background-color .2s ease-in-out;
+  padding:2em;
+  max-width:50rem
 }
 
 .slots.game-over {
-  background-color: lawngreen;
+  background-color:#7cfc00
 }
 
 .card {
-  min-height: 8em;
-  min-width: 4em;
-  box-shadow: 0 0 1em rgba(0, 0, 0, 0.2);
-  border-radius: 0.2em;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5em;
-  justify-content: space-between;
-  align-items: center;
-  transition: opacity 0.2s ease-in-out;
-  background-color: white;
+  min-height:8em;
+  min-width:4em;
+  box-shadow:0 0 1em rgba(0,0,0,0.2);
+  border-radius:.2em;
+  display:flex;
+  flex-direction:column;
+  gap:.5em;
+  justify-content:space-between;
+  align-items:center;
+  transition:opacity .2s ease-in-out, background-color .5s ease-in-out;
+  background-color:#fff;
+  flex:0 0 20%
 }
 
 .card > figure {
-  width: 100%;
-  transition: opacity 0.2s ease-in-out;
-  margin: 0;
-  padding: 1em;
+  width:100%;
+  transition:opacity .2s ease-in-out, background-color .5s ease-in-out;
+  margin:0;
+  padding:1em
 }
 
 .card img {
-  display: block;
-  width: 6em;
-  height: auto;
+  display:block;
+  width:100%;
+  aspect-ratio:1;
+  object-fit:cover;
+  height:auto
 }
 
-.card p,
-button {
-  font-weight: 500;
-  font-variant: all-petite-caps;
-  letter-spacing: 0.1em;
+.card p {
+  padding:1em
 }
-.history {
-  margin-bottom: 2em;
+
+.card p,button {
+  font-weight:500;
+  font-variant:all-petite-caps;
+  letter-spacing:.1em
 }
+
 .history > div {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.8rem;
-  gap: 2em;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:.7rem;
+  max-width:40rem;
+  gap:2em
 }
+
 .history .result {
-  font-size: 2.5em;
+  font-size:2.5em;
+  flex:1 1 10em
 }
 
 button {
-  background: transparent;
-  border: 0.2em solid;
-  font: inherit;
-  font-weight: bold;
-  padding: 0.5em 1em;
-  margin-block: 2em;
-  display: inline-block;
-  box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.8);
-  transition: box-shadow 0.2s ease-in-out;
+  background:transparent;
+  border:.2em solid;
+  font:inherit;
+  font-weight:700;
+  padding:.5em 1em;
+  margin-block:2em;
+  display:inline-block;
+  box-shadow:0 0 .5em rgba(0,0,0,0.8);
+  transition:box-shadow .2s ease-in-out
 }
-button:enabled:hover,
-button:enabled:focus-visible {
-  box-shadow: 0 0 0.2em rgba(0, 0, 0, 0.8);
+
+button:enabled:hover,button:enabled:focus-visible {
+  box-shadow:0 0 .2em rgba(0,0,0,0.8)
 }
 
 .center {
-  text-align: center;
+  text-align:center
+}
+
+.target {
+  background-color: #3cb497;
+  outline: .1em dashed white;
+  outline-offset: -.2em;
 }
 </style>
