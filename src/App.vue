@@ -58,7 +58,7 @@ function end(i, e) {
   const target = e.currentTarget.tagName
   e.currentTarget.classList.remove('over')
   type.value = null
-  if (t === 'opo' && target === 'DIV') {
+  if (t === 'opo') {
     pegs.value[draggingIndex.value] = pegs.value.splice(i, 1, pegs.value[draggingIndex.value])[0]
   }
   if (t === 'img' && target === 'FIGURE') {
