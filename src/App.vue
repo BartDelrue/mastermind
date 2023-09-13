@@ -24,12 +24,12 @@ const goal = ref([
   }
 ])
 const imgs = goal.value
-  .map((g) => ({ img: g.img, rand: Math.random() }))
-  .sort((a, b) => (a.rand > b.rand ? 1 : 0))
+  .map(({img}) => ({ img, rand: Math.random() }))
+  .sort((a, b) => a.rand >= b.rand ? 1 : -1)
   .map((g) => g.img)
 const opos = goal.value
-  .map((g) => ({ opo: g.opo, rand: Math.random() }))
-  .sort((a, b) => (a.rand > b.rand ? 1 : 0))
+  .map(({opo}) => ({ opo, rand: Math.random() }))
+  .sort((a, b) => a.rand >= b.rand ? 1 : -1)
   .map((g) => g.opo)
 const pegs = ref(goal.value.map((g, i) => ({ opo: opos[i], img: imgs[i] })))
 
