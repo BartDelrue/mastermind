@@ -195,11 +195,12 @@ li {
   background-color:#7cfc00
 }
 
-:not(.history) .card {
-  cursor: grab;
+.history .card {
+  cursor: default;
 }
 
 .card {
+  cursor: grab;
   min-height:8em;
   min-width:4em;
   box-shadow:0 0 1em rgba(0,0,0,0.2);
