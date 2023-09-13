@@ -35,6 +35,7 @@ const pegs = ref(goal.value.map((g, i) => ({ opo: opos[i], img: imgs[i] })))
 
 const history = ref([])
 const draggingIndex = ref(null)
+const type = ref(null)
 const gameOver = ref(false)
 
 function check() {
@@ -53,21 +54,21 @@ function check() {
 }
 
 function end(i, e) {
-  const type = e.dataTransfer.getData('text')
+  const t = type.value
   const target = e.currentTarget.tagName
   e.currentTarget.classList.remove('over')
-  if (type === 'opo' && target === 'DIV') {
+  if (t === 'opo' && target === 'DIV') {
     pegs.value[draggingIndex.value] = pegs.value.splice(i, 1, pegs.value[draggingIndex.value])[0]
   }
-  if (type === 'img' && target === 'FIGURE') {
+  if (t === 'img' && target === 'FIGURE') {
     const img = pegs.value[i].img
     pegs.value[i].img = pegs.value[draggingIndex.value].img
     pegs.value[draggingIndex.value].img = img
   } else e.preventDefault()
 }
 
-function start(p, type, e) {
-  e.dataTransfer.setData('text', type)
+function start(p, t, e) {
+  type.value = t
   e.stopPropagation()
   draggingIndex.value = p
 }
@@ -76,16 +77,17 @@ function leave(e) {
   e.currentTarget.classList.remove('over')
 }
 function over(e) {
-  const type = e.dataTransfer.getData('text')
+  const t = type.value
   const target = e.currentTarget.tagName
-
-  if (type === 'opo' && target === 'DIV') {
+  if (t === 'opo' && target === 'DIV') {
     e.currentTarget.classList.add('over')
     e.preventDefault()
+    return true
   }
-  if (type === 'img' && target === 'FIGURE') {
+  if (t === 'img' && target === 'FIGURE') {
     e.currentTarget.classList.add('over')
     e.preventDefault()
+    return true
   }
 }
 </script>
