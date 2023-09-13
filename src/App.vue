@@ -4,7 +4,7 @@ import { nextTick, ref } from 'vue'
 const goal = ref([
   {
     opo: 'Web developer',
-    img: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.specialistspeakers.com%2Fwp-content%2Fuploads%2F2015%2F09%2FTim-Berners-Lee.jpg&f=1&nofb=1&ipt=0b187a2e147d9ed146a7664a1279b517cb6454bcf6cd73709d4283dac8bd8003&ipo=images'
+    img: new URL('@/assets/img/davy.jpg', import.meta.url).href
   },
   {
     opo: 'Network & security',
