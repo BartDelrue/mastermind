@@ -195,6 +195,10 @@ li {
   background-color:#7cfc00
 }
 
+:not(.history) .card {
+  cursor: grab;
+}
+
 .card {
   min-height:8em;
   min-width:4em;
