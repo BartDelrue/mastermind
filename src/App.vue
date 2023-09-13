@@ -93,48 +93,83 @@ function over(e) {
 </script>
 
 <template>
-  <div class="history">
-    <div v-for="(h, i) in history" :key="i">
-      <div class="slots">
-        <div v-for="p in h.pegs" :key="p.opo" class="card">
-          <figure>
-            <img :src="p.img" alt="" draggable="false" />
+  <h1>EOICTMind</h1>
+  <div class="sidebar-layout">
+    <section>
+      <h2>Instructies</h2>
+      <ul>
+        <li>Sleep de docenten naar hun juiste vak</li>
+        <li>Sleep de vakken in de juiste volgorde</li>
+        <li>📍 : aantal juiste posities</li>
+        <li>🧑‍🏫 : aantal correcte vak/docent combinaties</li>
+      </ul>
+    </section>
+    <section>
+      <h2>Kraak de code!</h2>
+      <div class="history">
+        <div v-for="(h, i) in history" :key="i">
+          <div class="slots">
+            <div v-for="p in h.pegs" :key="p.opo" class="card">
+              <figure>
+                <img :src="p.img" alt="" draggable="false" />
+              </figure>
+              <p>{{ p.opo }}</p>
+            </div>
+          </div>
+          <div class="result">
+            <p>📍{{ h.bulls }}</p>
+            <p>🧑‍🏫 {{ h.imgs }}</p>
+          </div>
+        </div>
+      </div>
+      <div class="slots" :class="{ 'game-over': gameOver }">
+        <div
+            v-for="(p, i) in pegs"
+            :key="p.opo"
+            @drop.prevent="end(i, $event)"
+            @dragover="over"
+            @dragleave.prevent="leave"
+            @dragstart="start(i, 'opo', $event)"
+            class="card"
+            draggable="true"
+        >
+          <figure @drop.prevent="end(i, $event)" @dragleave.prevent="leave" @dragover="over">
+            <img :src="p.img" @dragstart="start(i, 'img', $event)" draggable="true" alt="" />
           </figure>
+
           <p>{{ p.opo }}</p>
         </div>
       </div>
-      <div class="result">
-        <p>📍{{ h.bulls }}</p>
-        <p>🧑‍🏫 {{ h.imgs }}</p>
+      <div class="center">
+        <button :disabled="gameOver" @click="check">check</button>
+        <p>Aantal pogingen: {{ history.length }}</p>
       </div>
-    </div>
+    </section>
   </div>
-  <div class="slots" :class="{ 'game-over': gameOver }">
-    <div
-      v-for="(p, i) in pegs"
-      :key="p.opo"
-      @drop.prevent="end(i, $event)"
-      @dragover="over"
-      @dragleave.prevent="leave"
-      @dragstart="start(i, 'opo', $event)"
-      class="card"
-      draggable="true"
-    >
-      <figure @drop.prevent="end(i, $event)" @dragleave.prevent="leave" @dragover="over">
-        <img :src="p.img" @dragstart="start(i, 'img', $event)" draggable="true" alt="" />
-      </figure>
-
-      <p>{{ p.opo }}</p>
-    </div>
-  </div>
-
-  <button :disabled="gameOver" @click="check">check</button>
 </template>
 
 <style>
 body {
   user-select: none;
 }
+
+.sidebar-layout {
+  display: flex;
+  gap: 4em;
+  flex-wrap: wrap;
+  align-items: flex-start;
+}
+
+.sidebar-layout > section:first-child {
+  flex: 0 1 24rem;
+  position: sticky;
+  top: 0;
+}
+
+li {
+  margin-block: .5em;
+}
+
 .history .slots {
   filter: grayscale(1);
 }
@@ -215,5 +250,9 @@ button {
 button:enabled:hover,
 button:enabled:focus-visible {
   box-shadow: 0 0 0.2em rgba(0, 0, 0, 0.8);
+}
+
+.center {
+  text-align: center;
 }
 </style>
